@@ -1,4 +1,92 @@
 deployAs:
+  - name: free-sample-product-service
+    applicationType: service
+    endpoint: /free-sample-product-service
+    scripts:
+      postDeploy: npm install && npm run build && npm run connector:post-deploy
+      preUndeploy: npm install && npm run build && npm run connector:pre-undeploy
+    configuration:
+      standardConfiguration:
+        - key: SAMPLE_PRODUCT_QUANTITY
+          description: Number of free items to distribute
+          required: true
+        - key: SAMPLE_PRODUCT_SKU
+          description: SKU of the free product
+          required: true
+        - key: CART_MIN_VALUE
+          description: Minimum value of the cart in cents
+          required: true
+        - key: CTP_REGION
+          description: commercetools Composable Commerce API region
+          required: false
+          default: "europe-west1.gcp"
+        - key: CHANNEL_KEY
+          description: Channel key to be used for Inventory control
+          required: false
+          default: "free-sample-channel"
+        - key: SAMPLE_LINEITEM_KEY
+          description: Sample LineItem key in the Cart
+          required: false
+          default: "free-sample-line-item"
+      securedConfiguration:
+        - key: CTP_PROJECT_KEY
+          description: commercetools Composable Commerce project key
+          required: true
+        - key: CTP_CLIENT_ID
+          description: commercetools Composable Commerce client ID
+          required: true
+        - key: CTP_CLIENT_SECRET
+          description: commercetools Composable Commerce client secret
+          required: true
+  - name: new-product-event-app
+    applicationType: event
+    endpoint: /new-product-event-app
+    scripts:
+      postDeploy: npm install && npm run build && npm run connector:post-deploy
+      preUndeploy: npm install && npm run build && npm run connector:pre-undeploy
+    configuration:
+      standardConfiguration:
+        - key: NEW_CATEGORY_KEY
+          description: The key of the Category used for new arrivals
+          required: true
+        - key: CTP_REGION
+          description: commercetools Composable Commerce API region
+          required: false
+          default: europe-west1.gcp
+      securedConfiguration:
+        - key: CTP_PROJECT_KEY
+          description: commercetools Composable Commerce project key
+          required: true
+        - key: CTP_CLIENT_ID
+          description: commercetools Composable Commerce client ID
+          required: true
+        - key: CTP_CLIENT_SECRET
+          description: commercetools Composable Commerce client secret
+          required: true
+  - name: new-category-cleanup-job-app
+    applicationType: job
+    endpoint: /new-category-cleanup-job-app
+    properties:
+      schedule: "0 1 * * *"
+    configuration:
+      standardConfiguration:
+        - key: NEW_CATEGORY_KEY
+          description: The key of the Category used for new arrivals
+          required: true
+        - key: CTP_REGION
+          description: commercetools Composable Commerce API region
+          required: false
+          default: europe-west1.gcp
+      securedConfiguration:
+        - key: CTP_PROJECT_KEY
+          description: commercetools Composable Commerce Project key
+          required: true
+        - key: CTP_CLIENT_ID
+          description: commercetools Composable Commerce API Client ID
+          required: true
+        - key: CTP_CLIENT_SECRET
+          description: commercetools Composable Commerce API Client secret
+          required: true
   - name: mail-sender
     applicationType: event
     endpoint: /mailSender
